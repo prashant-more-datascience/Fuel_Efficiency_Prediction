@@ -6,7 +6,7 @@ from openai import OpenAI
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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",  # Replace with your actual OpenRouter API key
+    api_key=st.secrets["OPENAI_API_KEY"],  # Replace with your actual OpenRouter API key
 )
 
 def suggest_car_modifications(
