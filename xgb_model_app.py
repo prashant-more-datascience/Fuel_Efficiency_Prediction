@@ -176,7 +176,7 @@ def set_custom_css():
     </style>
     """
     st.markdown(custom_css, unsafe_allow_html=True)
-    st.markdown('<h1 class="welcome-message"> ⛽ Welcome Fuel Efficiency Predictor ⛽ </h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="welcome-message"> ⛽ Fuel Efficiency Predictor ⛽ </h1>', unsafe_allow_html=True)
 
 # Apply custom CSS and background image
 set_custom_css()
