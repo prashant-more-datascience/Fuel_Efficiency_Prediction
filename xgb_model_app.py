@@ -197,7 +197,7 @@ car_image_url = "https://i.pinimg.com/736x/13/a6/e7/13a6e7c7214158c4f67608478852
 set_bg_from_url(car_image_url)
 
 # ---------------- Load Model ----------------
-xgb_model = joblib.load("efficiency_xgb_model.pkl")
+xgb_model = joblib.load("new_xgb_model.pkl")
 scaler = joblib.load("scaler_xgb_model.pkl")
 
 # ---------------- Input Form ----------------
