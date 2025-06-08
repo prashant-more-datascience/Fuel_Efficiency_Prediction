@@ -47,14 +47,71 @@ def suggest_car_modifications(
                 "content": prompt
             }
         ],
-        extra_headers={
-            "HTTP-Referer": "<YOUR_SITE_URL>",  # Optional for rankings
-            "X-Title": "<YOUR_SITE_NAME>",     # Optional for rankings
-        },
-        extra_body={},  # Can be used for custom parameters
     )
 
     return completion.choices[0].message.content
+
+
+
+# Initialize OpenAI client (OpenRouter)
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key="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",  # Replace with your OpenRouter key
+)
+
+# Function to Get Chatbot Responses
+def chat_with_bot():
+    chat_input_key = f"chat_input_{len(st.session_state.chat_history)}"
+
+    user_input = st.text_input(
+        "You:", key=chat_input_key, placeholder="Ask a car-related question..."
+    )
+
+    if user_input:
+        # Store the user's message
+        st.session_state.chat_history.append(f"🧑 You: {user_input}")
+
+        # Generate AI Response
+        prompt = f"""You are a **car expert chatbot**.  
+                    - Answer **only car-related questions**.  
+                    - Do **not** ask questions or start conversations.  
+                    - Do **not include "User:" in responses**.  
+                    - If a question is **not about cars**, reply: "I only answer car-related questions."  
+                    - Keep responses **concise, accurate, and professional**.  
+
+User: {user_input}  
+AI:"""
+
+        try:
+            completion = client.chat.completions.create(
+                model="meta-llama/llama-4-maverick:free",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+            )
+
+            ai_response = completion.choices[0].message.content
+
+        except Exception as e:
+            ai_response = f"❌ Error: {str(e)}"
+
+        # Store AI Response
+        st.session_state.chat_history.append(f"🤖 AI: {ai_response}")
+
+        # Refresh UI to update chat history
+        st.rerun()
+
+# Initialize Chat History & Stored Data
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+if "mpg_prediction" not in st.session_state:
+    st.session_state.mpg_prediction = None
+if "ai_suggestions" not in st.session_state:
+    st.session_state.ai_suggestions = None
+
 
 
 # ---------------- Custom Styling Function ----------------
@@ -222,7 +279,9 @@ if st.button("PREDICT"):
     with st.spinner("Generating Prediction..."):
         input_data = np.array([[cylinders, displacement, weight, horsepower, acceleration] + fuel_encoded])
         input_scaled = scaler.transform(input_data)
+       # XGBoost Prediction
         st.session_state.kmpl_prediction = xgb_model.predict(input_scaled)[0]  
+
         # Get LLM suggestions
         llm_response = suggest_car_modifications(
             acceleration, displacement, weight, horsepower, cylinders
@@ -265,3 +324,12 @@ if "kmpl_prediction" in st.session_state:
         if st.session_state.ai_suggestions:        
             st.subheader("💡 AI Suggestions for Better Fuel Efficiency")
             st.write(st.session_state.ai_suggestions)
+
+
+st.subheader("💬 AI Car Expert Chatbot")
+st.write("Ask me anything about cars, engines, fuel efficiency, and maintenance!")
+
+for message in st.session_state.chat_history:
+    st.write(message)
+
+chat_with_bot()
