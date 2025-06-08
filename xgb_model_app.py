@@ -56,7 +56,7 @@ def suggest_car_modifications(
 # Initialize OpenAI client (OpenRouter)
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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",  # Replace with your OpenRouter key
+    api_key=st.secrets["OPENAI_API_KEY"],  # Replace with your OpenRouter key
 )
 
 # Function to Get Chatbot Responses
