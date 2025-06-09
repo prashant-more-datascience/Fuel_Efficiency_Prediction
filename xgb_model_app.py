@@ -280,8 +280,8 @@ if st.button("PREDICT"):
         input_data = np.array([[cylinders, displacement, weight, horsepower, acceleration] + fuel_encoded])
         input_scaled = scaler.transform(input_data)
        # XGBoost Prediction
-       xgb_predict=xgb_model.predict(input_scaled)[0]
-        st.session_state.kmpl_prediction = (xbg_predict+1.7)
+        st.session_state.kmpl_prediction = xgb_model.predict(input_scaled)[0]
+        st.session_state.kmpl_prediction=(st.session_state.kmpl_prediction)+1.7
 
         # Get LLM suggestions
         llm_response = suggest_car_modifications(
