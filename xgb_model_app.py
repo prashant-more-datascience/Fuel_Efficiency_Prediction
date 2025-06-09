@@ -265,14 +265,15 @@ displacement = st.number_input("Displacement", min_value=0, placeholder="Displac
 weight = st.number_input("Weight", min_value=0, placeholder="Weight")
 horsepower = st.number_input("Horsepower", min_value=0,placeholder="Horsepower")
 cylinders = st.number_input("Cylinders", min_value=0, max_value=12, placeholder="Cylinders")
-fuel_type = st.selectbox("Fuel Type",options=["Petrol", "Diesel"],placeholder="Select Fuel Type")
+# fuel_type = st.selectbox("Fuel Type",options=["Petrol", "Diesel"],placeholder="Select Fuel Type")
+fuel_encoded=[1,0]
 
 # ---------------- One-Hot Encode Fuel ----------------
-fuel_encoded = [0, 0]  # Order: [Diesel, Petrol]
-if fuel_type == "Diesel":
-    fuel_encoded[0] = 1
-elif fuel_type == "Petrol":
-    fuel_encoded[1] = 1
+# fuel_encoded = [0, 0]  # Order: [Diesel, Petrol]
+# if fuel_type == "Diesel":
+#     fuel_encoded[0] = 1
+# elif fuel_type == "Petrol":
+#     fuel_encoded[1] = 1
 
 # ---------------- Predict ----------------
 if st.button("PREDICT"):
